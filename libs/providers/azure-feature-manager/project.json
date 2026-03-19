@@ -1,5 +1,5 @@
 {
-  "name": "azure-feature-manager",
+  "name": "providers-azure-feature-manager",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "providers/src",
   "projectType": "library",
