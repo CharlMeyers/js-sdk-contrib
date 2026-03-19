@@ -19,6 +19,7 @@
     "paths": {
       "@js-sdk-contrib/workspace-plugin": ["tools/workspace-plugin/src/index.ts"],
       "@openfeature/aws-ssm-provider": ["providers/src/index.ts"],
+      "@openfeature/azure-feature-manager-provider": ["providers/src/index.ts"],
       "@openfeature/config-cat-core": ["libs/shared/config-cat-core/src/index.ts"],
       "@openfeature/config-cat-provider": ["libs/providers/config-cat/src/index.ts"],
       "@openfeature/config-cat-web-provider": ["libs/providers/config-cat-web/src/index.ts"],
