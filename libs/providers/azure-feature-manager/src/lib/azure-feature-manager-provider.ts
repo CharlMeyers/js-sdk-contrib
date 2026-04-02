@@ -1,4 +1,4 @@
-import type { EvaluationContext, JsonValue, Logger, Provider, ResolutionDetails } from '@openfeature/web-sdk';
+import type { JsonValue, Logger, Provider, ResolutionDetails } from '@openfeature/web-sdk';
 import { ErrorCode, OpenFeatureEventEmitter, ProviderEvents, StandardResolutionReasons } from '@openfeature/web-sdk';
 import { ConfigurationMapFeatureFlagProvider, FeatureManager } from '@microsoft/feature-management';
 import { load } from '@azure/app-configuration-provider';
@@ -13,7 +13,7 @@ export class AzureFeatureManagerProvider implements Provider {
   #refreshInterval: number;
   #refreshTimer: ReturnType<typeof setInterval> | null = null;
   #connectionString: string;
-  #featureManager: FeatureManager;
+  #featureManager: FeatureManager | null = null;
   #cache: Map<string, ResolutionDetails<boolean>> = new Map();
   #logger?: Logger;
 
@@ -23,7 +23,7 @@ export class AzureFeatureManagerProvider implements Provider {
     this.#logger = logger;
   }
 
-  async initialize?(): Promise<void> {
+  async initialize(): Promise<void> {
     try {
       const azureAppConfig = await load(this.#connectionString, {
         featureFlagOptions: {
@@ -46,12 +46,14 @@ export class AzureFeatureManagerProvider implements Provider {
 
       this.events.emit(ProviderEvents.Ready);
     } catch (err) {
-      this.#logger?.error('Error initializing Azure Feature Manager Provider', { error: err.toString() });
+      this.#logger?.error('Error initializing Azure Feature Manager Provider', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       this.events.emit(ProviderEvents.Error);
     }
   }
 
-  async onClose?(): Promise<void> {
+  async onClose(): Promise<void> {
     if (this.#refreshTimer) {
       clearInterval(this.#refreshTimer as any);
       this.#refreshTimer = null;
@@ -76,12 +78,7 @@ export class AzureFeatureManagerProvider implements Provider {
     };
   }
 
-  resolveStringEvaluation(
-    flagKey: string,
-    defaultValue: string,
-    context: EvaluationContext,
-    logger: Logger,
-  ): ResolutionDetails<string> {
+  resolveStringEvaluation(flagKey: string, defaultValue: string): ResolutionDetails<string> {
     return {
       value: defaultValue,
       reason: StandardResolutionReasons.ERROR,
@@ -90,12 +87,7 @@ export class AzureFeatureManagerProvider implements Provider {
     };
   }
 
-  resolveNumberEvaluation(
-    flagKey: string,
-    defaultValue: number,
-    context: EvaluationContext,
-    logger: Logger,
-  ): ResolutionDetails<number> {
+  resolveNumberEvaluation(flagKey: string, defaultValue: number): ResolutionDetails<number> {
     return {
       value: defaultValue,
       reason: StandardResolutionReasons.ERROR,
@@ -104,12 +96,7 @@ export class AzureFeatureManagerProvider implements Provider {
     };
   }
 
-  resolveObjectEvaluation<T extends JsonValue>(
-    flagKey: string,
-    defaultValue: T,
-    context: EvaluationContext,
-    logger: Logger,
-  ): ResolutionDetails<T> {
+  resolveObjectEvaluation<T extends JsonValue>(flagKey: string, defaultValue: T): ResolutionDetails<T> {
     return {
       value: defaultValue,
       reason: StandardResolutionReasons.ERROR,
@@ -148,7 +135,9 @@ export class AzureFeatureManagerProvider implements Provider {
         }
       }
     } catch (err) {
-      this.#logger?.error('Error populating feature flag cache', { error: err.toString() });
+      this.#logger?.error('Error populating feature flag cache', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 }

@@ -8,7 +8,7 @@ jest.mock('@microsoft/feature-management', () => ({
 }));
 
 import { AzureFeatureManagerProvider } from './azure-feature-manager-provider';
-import { ErrorCode, Logger, ProviderEvents, StandardResolutionReasons } from '@openfeature/web-sdk';
+import { Logger, ErrorCode, ProviderEvents, StandardResolutionReasons } from '@openfeature/web-sdk';
 import { ConfigurationMapFeatureFlagProvider, FeatureManager } from '@microsoft/feature-management';
 import { load } from '@azure/app-configuration-provider';
 
@@ -218,7 +218,7 @@ describe('AzureFeatureManagerProvider', () => {
 
       await provider.initialize();
 
-      expect(mockLogger.logError).toHaveBeenCalledWith(
+      expect(mockLogger.error).toHaveBeenCalledWith(
         'Error populating feature flag cache',
         expect.objectContaining({ error: expect.any(String) }),
       );
@@ -230,7 +230,7 @@ describe('AzureFeatureManagerProvider', () => {
       const featureName = 'cached-feature';
       mockFeatureManager.listFeatureNames.mockResolvedValue([featureName]);
       mockFeatureManager.isEnabled.mockResolvedValue(true);
-      mockFeatureManager.getVariant.mockResolvedValue(null);
+      mockFeatureManager.getVariant.mockResolvedValue(undefined);
 
       await provider.initialize();
 
@@ -340,7 +340,7 @@ describe('AzureFeatureManagerProvider', () => {
       const featureName = 'cached-feature';
       mockFeatureManager.listFeatureNames.mockResolvedValue([featureName]);
       mockFeatureManager.isEnabled.mockResolvedValue(true);
-      mockFeatureManager.getVariant.mockResolvedValue(null);
+      mockFeatureManager.getVariant.mockResolvedValue(undefined);
 
       await provider.initialize();
       await provider.onClose();
