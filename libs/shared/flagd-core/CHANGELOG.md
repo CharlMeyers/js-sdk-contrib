@@ -1,5 +1,35 @@
 # Changelog
 
+## [3.0.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-core-v2.0.0...flagd-core-v3.0.0) (2026-04-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* fractional bucketing improvements ([#1501](https://github.com/open-feature/js-sdk-contrib/issues/1501))
+
+### ✨ New Features
+
+* fractional bucketing improvements ([#1501](https://github.com/open-feature/js-sdk-contrib/issues/1501)) ([8dd11d5](https://github.com/open-feature/js-sdk-contrib/commit/8dd11d58b488dbec229e28794e257aaef256406d))
+
+## [2.0.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-core-v1.3.0...flagd-core-v2.0.0) (2026-03-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* graceful fallback to code default ([#1461](https://github.com/open-feature/js-sdk-contrib/issues/1461))
+
+### ✨ New Features
+
+* graceful fallback to code default ([#1461](https://github.com/open-feature/js-sdk-contrib/issues/1461)) ([d314df9](https://github.com/open-feature/js-sdk-contrib/commit/d314df90df26b7f7d5ae1e2a298e2cd4b844b288))
+
+## [1.3.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-core-v1.2.0...flagd-core-v1.3.0) (2026-03-10)
+
+
+### ✨ New Features
+
+* **flagd-core:** add disableDynamicCodeGeneration option for edge runtime compatibility (2/2) ([#1482](https://github.com/open-feature/js-sdk-contrib/issues/1482)) ([1a510d5](https://github.com/open-feature/js-sdk-contrib/commit/1a510d55c6e61634fe3e4acf1aef3f9607fb25b2))
+* **flagd-core:** pre-compile AJV validators for edge runtime compatibility (1/2) ([#1481](https://github.com/open-feature/js-sdk-contrib/issues/1481)) ([44dc9ab](https://github.com/open-feature/js-sdk-contrib/commit/44dc9ab771dd0adfb78d85a69b4a982dba23d28a))
+
 ## [1.2.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-core-v1.1.0...flagd-core-v1.2.0) (2026-02-12)
 
 

@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.15.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-provider-v0.14.0...flagd-provider-v0.15.0) (2026-04-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* fractional bucketing improvements ([#1501](https://github.com/open-feature/js-sdk-contrib/issues/1501))
+
+### ✨ New Features
+
+* fractional bucketing improvements ([#1501](https://github.com/open-feature/js-sdk-contrib/issues/1501)) ([8dd11d5](https://github.com/open-feature/js-sdk-contrib/commit/8dd11d58b488dbec229e28794e257aaef256406d))
+
+## [0.14.0](https://github.com/open-feature/js-sdk-contrib/compare/flagd-provider-v0.13.4...flagd-provider-v0.14.0) (2026-03-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* graceful fallback to code default ([#1461](https://github.com/open-feature/js-sdk-contrib/issues/1461))
+
+### ✨ New Features
+
+* **flagd-core:** pre-compile AJV validators for edge runtime compatibility (1/2) ([#1481](https://github.com/open-feature/js-sdk-contrib/issues/1481)) ([44dc9ab](https://github.com/open-feature/js-sdk-contrib/commit/44dc9ab771dd0adfb78d85a69b4a982dba23d28a))
+* graceful fallback to code default ([#1461](https://github.com/open-feature/js-sdk-contrib/issues/1461)) ([d314df9](https://github.com/open-feature/js-sdk-contrib/commit/d314df90df26b7f7d5ae1e2a298e2cd4b844b288))
+
 ## [0.13.4](https://github.com/open-feature/js-sdk-contrib/compare/flagd-provider-v0.13.3...flagd-provider-v0.13.4) (2026-02-12)
 
 
