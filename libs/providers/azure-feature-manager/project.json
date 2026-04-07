@@ -1,7 +1,7 @@
 {
   "name": "providers-azure-feature-manager",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "providers/src",
+  "sourceRoot": "libs/providers/azure-feature-manager/src",
   "projectType": "library",
   "release": {
     "version": {

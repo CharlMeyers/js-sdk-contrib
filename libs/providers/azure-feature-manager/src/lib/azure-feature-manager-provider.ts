@@ -10,43 +10,43 @@ export class AzureFeatureManagerProvider implements Provider {
 
   events = new OpenFeatureEventEmitter();
 
-  #refreshInterval: number;
-  #refreshTimer: ReturnType<typeof setInterval> | null = null;
-  #connectionString: string;
-  #featureManager: FeatureManager | null = null;
-  #cache: Map<string, ResolutionDetails<boolean>> = new Map();
-  #logger?: Logger;
+  private refreshInterval: number;
+  private refreshTimer: ReturnType<typeof setInterval> | null = null;
+  private connectionString: string;
+  private featureManager: FeatureManager | null = null;
+  private cache: Map<string, ResolutionDetails<boolean>> = new Map();
+  private logger?: Logger;
 
   constructor(connectionString: string, refreshIntervalMs = 30000, logger: Logger) {
-    this.#refreshInterval = refreshIntervalMs;
-    this.#connectionString = connectionString;
-    this.#logger = logger;
+    this.refreshInterval = refreshIntervalMs;
+    this.connectionString = connectionString;
+    this.logger = logger;
   }
 
   async initialize(): Promise<void> {
     try {
-      const azureAppConfig = await load(this.#connectionString, {
+      const azureAppConfig = await load(this.connectionString, {
         featureFlagOptions: {
           enabled: true,
           selectors: [{ keyFilter: '*' }],
           refresh: {
             enabled: true,
-            refreshIntervalInMs: this.#refreshInterval,
+            refreshIntervalInMs: this.refreshInterval,
           },
         },
       });
 
-      this.#featureManager = new FeatureManager(new ConfigurationMapFeatureFlagProvider(azureAppConfig));
+      this.featureManager = new FeatureManager(new ConfigurationMapFeatureFlagProvider(azureAppConfig));
       await this.prefetchFlags();
 
-      this.#refreshTimer = setInterval(async () => {
+      this.refreshTimer = setInterval(async () => {
         azureAppConfig.refresh();
         await this.prefetchFlags();
-      }, this.#refreshInterval);
+      }, this.refreshInterval);
 
       this.events.emit(ProviderEvents.Ready);
     } catch (err) {
-      this.#logger?.error('Error initializing Azure Feature Manager Provider', {
+      this.logger?.error('Error initializing Azure Feature Manager Provider', {
         error: err instanceof Error ? err.message : String(err),
       });
       this.events.emit(ProviderEvents.Error);
@@ -54,18 +54,18 @@ export class AzureFeatureManagerProvider implements Provider {
   }
 
   async onClose(): Promise<void> {
-    if (this.#refreshTimer) {
-      clearInterval(this.#refreshTimer as any);
-      this.#refreshTimer = null;
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer as any);
+      this.refreshTimer = null;
     }
 
-    this.#cache.clear();
-    this.#featureManager = null;
+    this.cache.clear();
+    this.featureManager = null;
     this.events.emit(ProviderEvents.Error);
   }
 
   resolveBooleanEvaluation(flagKey: string, defaultValue: boolean): ResolutionDetails<boolean> {
-    const cached = this.#cache.get(flagKey) as ResolutionDetails<boolean> | undefined;
+    const cached = this.cache.get(flagKey) as ResolutionDetails<boolean> | undefined;
     if (cached && typeof cached.value === 'boolean') {
       return cached;
     }
@@ -106,15 +106,15 @@ export class AzureFeatureManagerProvider implements Provider {
   }
 
   private async prefetchFlags(): Promise<void> {
-    if (!this.#featureManager) return;
+    if (!this.featureManager) return;
 
     try {
-      const names = await this.#featureManager.listFeatureNames();
+      const names = await this.featureManager.listFeatureNames();
 
       for (const name of names) {
         try {
-          const enabled = await this.#featureManager.isEnabled(name);
-          const variantObj = await this.#featureManager.getVariant(name);
+          const enabled = await this.featureManager.isEnabled(name);
+          const variantObj = await this.featureManager.getVariant(name);
           const variant = (variantObj && variantObj.name) || (enabled ? 'enabled' : 'disabled');
 
           const details: ResolutionDetails<boolean> = {
@@ -123,10 +123,10 @@ export class AzureFeatureManagerProvider implements Provider {
             variant: variant as string,
           };
 
-          this.#cache.set(name, details);
+          this.cache.set(name, details);
           this.events.emit(ProviderEvents.ConfigurationChanged);
         } catch (innerErr) {
-          this.#cache.set(name, {
+          this.cache.set(name, {
             value: false,
             reason: StandardResolutionReasons.ERROR,
             errorCode: ErrorCode.GENERAL,
@@ -135,7 +135,7 @@ export class AzureFeatureManagerProvider implements Provider {
         }
       }
     } catch (err) {
-      this.#logger?.error('Error populating feature flag cache', {
+      this.logger?.error('Error populating feature flag cache', {
         error: err instanceof Error ? err.message : String(err),
       });
     }
